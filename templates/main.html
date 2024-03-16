@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RentEaseAI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+    <style>
+        body{
+            background-color: #2b2c33;
+            color: #b3b3b6;
+            font-family: "Source Code Pro", monospace;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+        #main{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 100px 0 100px;
+        }
+        header{
+            margin-top: 50px;
+        }
+
+  
+  .search-input {
+    padding: 12px 20px;
+    padding-left: 50px;
+    /* padding: 10px 40px 10px 20px;  */
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    width: 550px;
+    background-image: url({{shiningStar}}), url({{microPhone}});
+    background-size: 20px;
+    background-position: 2%, 98%;
+    background-repeat: no-repeat; 
+  }
+  
+  .search-input:focus {
+    border-color: linear-gradient(#F66A4B, #4859F3);
+  }
+  
+  .container{
+    height: 140px;
+    width: 200px;
+    margin: 10px;
+    border-radius: 10px;
+    background-color: #383940;
+    color: #e3e3e4;
+    padding: 10px;
+    padding-top: 5px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .container a{
+    color: #e3e3e4;
+  }
+  .container span{
+    color: #77787b;
+  }
+  
+  #suggestions{
+    display: flex;
+    flex-direction: row;
+  }
+
+  .search-container{
+    margin-top: 0px;
+  }
+  
+  #answer .question{
+    color: #e3e3e4;
+    margin-top: 60px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  #answer .question p{
+    padding: 12px;
+    background-color: #383940;
+    margin-left: 20px;
+    width: 650px;
+    border-radius: 15px;
+  }
+  #answer .question img{
+    padding: 10px;
+    border-radius: 30px;
+    background-color: #383940;
+  }
+  #answer .answer{
+    color: #e3e3e4;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  #answer .answer p{
+    width: 670px;
+    padding: 1px;
+    margin: 0 0px 0 25px;
+  }
+  #answer .answer img{
+    padding: 8px;
+    border-radius: 30px;
+    background-color: #383940;
+  }
+  a{
+    text-decoration: none;
+  }
+    </style>
+</head>
+<body>
+    <div id="main">
+        <header>
+            <img src="{{ headingImg }}" alt="RentEaseAI">
+        </header>
+        <p>Ask AI about your own rights</p>
+        <div class="search-container">
+            <form action="/lawyer" method="post">
+                <input type="text" class="search-input" name="text" placeholder="Ask me anything..." style="letter-spacing: -.1px; font-size: 14px; color: black;">
+            </form>
+        </div>
+        <p style="color: #77787b;">You may ask</p>
+        <section id="suggestions">
+            <div class="container">
+                <form  id="suggestionsForm1" action="/lawyer" method="post">
+                    <input type="hidden" name="text" value="Can my landlord evict me without notifying me in advance and do I have to leave right away?">
+                            <p class="predefinedSuggestions">Can my landlord evict me <span>without notifying me in advance and do I have to leave right away?</span>
+                                <span style="color:#88898c;"><br>
+                                    <u>Ask this</u>
+                                </span>
+                            </p>      
+                </form>           
+            </div>
+            <div class="container">
+                <form  id="suggestionsForm2" action="/lawyer" method="post">
+                    <input type="hidden" name="text" value="My landlord is not returning my security deposit, what should I do in this case?">
+                        <p class="predefinedSuggestions">My landlord is not returning my security deposit<span>, what should I do in this case?</span>
+                            <br><br><span style="color:#88898c;">
+                                <u>Ask this</u>
+                            </span>
+                        </p>
+                </form>
+            </div>
+            <div class="container">
+                <form  id="suggestionsForm3" action="/lawyer" method="post">
+                    <input type="hidden" name="text" value="Can landlord come into my room anytime all of a sudden without notifying me in advance?">
+                        <p class="predefinedSuggestions">Can landlord come into my room anytime <span>all of a sudden without notifying me in advance?</span><br>
+                            <span style="color:#88898c;">
+                                <u>Ask this</u>
+                            </span>
+                        </p>
+                </form>
+            </div>
+            <div class="container">
+                <form  id="suggestionsForm4" action="/lawyer" method="post">
+                    <input type="hidden" name="text" value="Can landlord restrict the use of washing machine and lock it even if I don't pay the utility separately?">
+                        <p class="predefinedSuggestions">Can landlord restrict the use of washing machine<span> and lock it even if I don't pay the utility separately?</span><br>
+                            <span style="color:#88898c;">
+                                <u>Ask this</u>
+                            </span>
+                        </p>
+                </form>
+            </div>
+        </section>
+        <div id="answer">
+        {% if answer %}
+        <div class="question">
+            <img src="{{ flash }}" alt="icon"  height="20px" width="20px">
+            <p>{{question}}</p>
+        </div>
+        <div class="answer">
+            <img src="{{ shiningStar}}" alt="icon" height="24px" width="24px">
+            <p>{{answer}}</p>
+        </div>
+        {% endif %}
+        </div>
+    </div>
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var suggestions = document.querySelectorAll('.predefinedSuggestions');
+
+        // Add click event listener to each suggestion
+        suggestions.forEach(function(suggestion) {
+            suggestion.addEventListener('click', function() {
+                // Submit the corresponding form
+                var formId = this.parentNode.getAttribute('id');
+                document.getElementById(formId).submit();
+            });
+        });
+    });
+
+    // var links = document.querySelectorAll('.preDefinedPrompt');
+
+    // links.forEach(function(link) {
+    //     link.addEventListener("click", function(event) {
+    //         event.preventDefault(); // Prevent the default action of the link
+
+    //         // Get the value of the data-id attribute of the clicked element
+    //         var id = this.getAttribute("data-id");
+    //         console.log("Clicked link with data-id:", id);
+
+    //         // Define the string based on the data-id value
+    //         var myString = "";
+    //         if (id === "1") {
+    //             myString = "Can my landlord evict me without notifying me in advance and do I have to leave right away?";
+    //         } else if (id === "2") {
+    //             myString = "My landlord is not returning my security deposit, what should I do in this case?";
+    //         } else if (id === "3") {
+    //             myString = "Can landlord come into my room anytime all of a sudden without notifying me in advance?";
+    //         } else if (id === "4") {
+    //             myString = "Can landlord restrict the use of washing machine and lock it even if I don't pay the utility separately?";
+    //         }
+
+    //         // Make an HTTP request to Flask backend
+    //         var xhr = new XMLHttpRequest();
+    //         xhr.open("POST", "/lawyer", true);
+    //         xhr.setRequestHeader("Content-Type", "application/json");
+    //         xhr.onreadystatechange = function () {
+    //             if (xhr.readyState === 4 && xhr.status === 200) {
+    //                 console.log("Data sent successfully!");
+    //             }
+    //         };
+    //         xhr.send(JSON.stringify({ data: myString }));
+    //     });
+    // });
+</script>
+
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to RentEase AI</title>
+    <style>
+        html{
+            height: 100%;
+            background: linear-gradient(to bottom, #ffffff, #b3e5fc);
+
+        }
+        body {
+            
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            color: #03a9f4; /* Light Blue */
+        }
+
+        label {
+            color: #0277bd; /* Darker Light Blue */
+            font-size: 18px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            border: 2px solid #03a9f4; /* Light Blue */
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        button[type="submit"] {
+            background-color: #03a9f4; /* Light Blue */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>RentEase AI</h1>
+
+    <form action="/lawyer" method="post" style="margin-top: 30px;">
+        <label for="textInput">Enter Text:</label><br>
+        <input type="text" id="textInput" name="text"><br>
+        <button type="submit">Ask</button>
+    </form>
+    <div id="answer">
+        {% if answer %}
+            <p>Answer: {{answer}}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
