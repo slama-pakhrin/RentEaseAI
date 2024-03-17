@@ -9,50 +9,53 @@ import pandas as pd
 from data import question
 from data import text
 
-#integration
-
 from flask import Flask, request, render_template, redirect, url_for
 from flask_cors import CORS
 import os
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app)  # Enabling CORS(allowing sharing of data)) for all routes
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
-#->
-# Split into a list of paragraphs
+# Spliting into a list of paragraphs
 texts = text.split('\n')
-# Clean up to remove empty spaces and new lines
+
+# Cleaning up to remove empty spaces and new lines
 texts = np.array([t.strip(' \n') for t in texts if t])
-co = cohere.Client('3RBqyUGXWqQ6ClruJ9VibxRUtVtopwzQ1tzfvLmf')
+
+# Creating an instance of Cohere API client
+co = cohere.Client('GRAB_YOUR_COHERE_API_KEY') # get your key API key after signing up for Cohere
 
 # Get the embeddings
 response = co.embed( texts=texts.tolist()).embeddings
 
-# Check the dimensions of the embeddings
+# Checking the dimensions of embeddings
 embeds = np.array(response)
 
-# Create the search index, pass the size of embedding
+# Creating the search index, passing the size of embedding
 search_index = AnnoyIndex(embeds.shape[1], 'angular')
 
-# Add all the vectors to the search index
+# Adding all the vectors to the search index
 for i in range(len(embeds)):
     search_index.add_item(i, embeds[i])
 
-search_index.build(10) # 10 trees
-search_index.save('test.ann')
+search_index.build(10) # Number of tress: 10
+search_index.save('test.ann') #saving all the vector embeddings of our data inside a test.ann file
+
 
 def search_text(query):
-    # Get the query's embedding
+    # Getting the query's embedding
     query_embed = co.embed(texts=[query]).embeddings
-    # Retrieve the nearest neighbors
+    # Retrieving the nearest neighbors
     similar_item_ids = search_index.get_nns_by_vector(query_embed[0], 10, include_distances=True)
-    search_results = texts[similar_item_ids[0]]
+    search_results = texts[similar_item_ids[0]] 
     return search_results
 
-#creates prompt on the basis of context and question 
+
+#creating prompt on the basis of context and question 
 def ask_llm(question, num_generations=1):
-    # Search the text archive
+    
+    # Searching the text archive
     results = search_text(question)
 
     # Get the top result
@@ -76,17 +79,10 @@ def ask_llm(question, num_generations=1):
         num_generations=num_generations
     )
     return prediction.generations
-
-# question = "can my landlord come and tell me to leave?"
-# results = ask_llm(question,)
-# print(results[0])
-
-# question = input("Enter your question....")
-# results = ask_llm(question,)
-# print(results[0])
-
-#
  
+
+#flask for backend of webapp
+
 IMG_FOLDER = os.path.join("./static", "img")
 app.config["UPLOAD_FOLDER"] = IMG_FOLDER
 
